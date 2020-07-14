@@ -5,8 +5,9 @@ With pymongo-model, it will be easier for you to use pymongo, as you will get a 
 \
 SimpleModel object provides basic feature of updating mongo document locally and commiting at once.\
 \
-You can use below models for document history tracking feature e.g can be used in undo operation\
-1. In DiffHistoryModelV1, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.\
+Also, 
+You can use below models for document history tracking feature e.g can be used in undo operation
+1. In DiffHistoryModelV1, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.
 2. In DiffHistoryModelV2, we are using [json-diff](https://github.com/fzumstein/jsondiff) for calculating difference in the versions and storing just the difference object instead of entire document for versioning.
 
 Installation
@@ -30,7 +31,7 @@ client = pymongo.MongoClient(MONGO_KEY)
 db = client["your_database"]
 ```
 
-##### Using SimpleModel
+#### Using SimpleModel
 ```python
 """ A simple model that wraps mongodb document 
 """
@@ -43,7 +44,7 @@ sample = YourSimpleModel({"username":"pankajsingh.08","name": "Pankaj Singh", "a
 sample.save()  #commited in db
 
 #Updating old document
-sample = YourSimpleModel({"_id":ObjectId("provide_mongo_id_here")})    #provide mongo document id for fetching
+sample = YourSimpleModel({"_id":ObjectId("provide_doc_id_here")})    #provide mongo document id for fetching
 sample.reload()     #this fetches data from db and maps to local dict object   
 sample["city"] = "Hyderabad"  #adding new key to document in local copy
 sample["username"] = "aa3pankaj" #updating old key in local copy
@@ -52,7 +53,7 @@ sample.save()  #now everything will be committed at once in db
 
 ```
 
-##### Using DiffHistoryModelV1
+#### Using DiffHistoryModelV1
 ```python
 
 """ A simple model that wraps mongodb document, 
@@ -77,7 +78,7 @@ sample = YourDiffModel1({"username":"pankajsingh08","name": "Pankaj Singh", "age
 sample.save()  #commited in db
 
 #Updating old document
-sample = Match({"_id":ObjectId("provide_mongo_id_here")})    #provide mongo document id for fetching
+sample = Match({"_id":ObjectId("provide_doc_id_here")})    #provide mongo document id for fetching
 sample.reload()     #this fetches data from db and maps to local dict object   
 sample["city"] = "Pune"  #adding new key to document in local copy
 sample.save()  #commited in original collection, Also a new document is created in the delta_collection
@@ -88,7 +89,7 @@ sample.delete_latest_revision()  #deletes latest record in delta_collection, and
 sample.undo()   #deletes latest record in delta_collection, and makes previos record as latest, Also original document will be updated
 ```
 
-##### Using DiffHistoryModelV2
+#### Using DiffHistoryModelV2
 ```python
 
 """ A simple model that wraps mongodb document, 
@@ -113,7 +114,7 @@ sample = YourDiffModel2({"username":"pankajsingh08","name": "Pankaj Singh", "age
 sample.save()  #commited in db
 
 #Updating old document
-sample = Match({"_id":ObjectId("provide_mongo_id_here")})    #provide mongo document id for fetching
+sample = Match({"_id":ObjectId("provide_doc_id_here")})    #provide mongo document id for fetching
 sample.reload()     #this fetches data from db and maps to local dict object   
 sample["city"] = "Pune"  #adding new key to document in local copy
 sample.save()  #commited in original collection, Also a new document is created in the delta_collection
