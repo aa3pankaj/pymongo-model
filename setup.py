@@ -7,7 +7,7 @@ REQUIREMENTS = ['jsondiff','pymongo']
 
 setuptools.setup(
     name="pymongo-model",
-    version="1.0.4",
+    version="1.0.5",
     author="Pankaj Singh",
     author_email="aa3pankaj@gmail.com",
     description="Simple model based usage of pymongo, also provides models for mongoDB document history tracking",
