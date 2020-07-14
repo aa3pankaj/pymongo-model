@@ -2,11 +2,12 @@ Pymongo Model
 ==================================================== 
 
 With pymongo-model, it will be easier for you to use pymongo, as you will get a local copy of mongodb document, you can do any changes in the local copy i.e python dict, changes will be committed from local copy to mongoDB only when you invoke save method like it happens in any other model based library.\
-SimpleModel object provides basic feature of updating mongo document locally and commiting at once.
+\
+SimpleModel object provides basic feature of updating mongo document locally and commiting at once.\
 \
 You can use below models for document history tracking feature e.g can be used in undo operation\
-In DiffHistoryModelV1, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.\
-In DiffHistoryModelV2, we are using [json-diff](https://github.com/fzumstein/jsondiff) for calculating difference in the versions and storing just the difference object instead of entire document for versioning.
+1. In DiffHistoryModelV1, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.\
+2. In DiffHistoryModelV2, we are using [json-diff](https://github.com/fzumstein/jsondiff) for calculating difference in the versions and storing just the difference object instead of entire document for versioning.
 
 Installation
 ------------
@@ -29,7 +30,7 @@ client = pymongo.MongoClient(MONGO_KEY)
 db = client["your_database"]
 ```
 
-#### Using SimpleModel
+##### Using SimpleModel
 ```python
 """ A simple model that wraps mongodb document 
 """
@@ -38,11 +39,11 @@ class YourSimpleModel(SimpleModel):
 
 
 #Creating new document
-sample = YourSimpleModel({"username":"pankajsingh08","name": "Pankaj Singh", "age": "25"})    
+sample = YourSimpleModel({"username":"pankajsingh.08","name": "Pankaj Singh", "age": "25"})    
 sample.save()  #commited in db
 
 #Updating old document
-sample = Match({"_id":ObjectId("provide_mongo_id_here")})    #provide mongo document id for fetching
+sample = YourSimpleModel({"_id":ObjectId("provide_mongo_id_here")})    #provide mongo document id for fetching
 sample.reload()     #this fetches data from db and maps to local dict object   
 sample["city"] = "Hyderabad"  #adding new key to document in local copy
 sample["username"] = "aa3pankaj" #updating old key in local copy
@@ -51,7 +52,7 @@ sample.save()  #now everything will be committed at once in db
 
 ```
 
-#### Using DiffHistoryModelV1
+##### Using DiffHistoryModelV1
 ```python
 
 """ A simple model that wraps mongodb document, 
@@ -87,7 +88,7 @@ sample.delete_latest_revision()  #deletes latest record in delta_collection, and
 sample.undo()   #deletes latest record in delta_collection, and makes previos record as latest, Also original document will be updated
 ```
 
-#### Using DiffHistoryModelV2
+##### Using DiffHistoryModelV2
 ```python
 
 """ A simple model that wraps mongodb document, 
