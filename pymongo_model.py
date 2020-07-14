@@ -55,8 +55,7 @@ class DiffHistoryModelV2(SimpleModel):
             delta_collection.insert_one({ "collection_name": self.name,
                                                 "document_id" : self._id,
                                                 "diff": diff,
-                                                "_version": delta_collection.count()+1,
-                                                "reason":"update"
+                                                "_version": delta_collection.count()+1
             }
             )
 

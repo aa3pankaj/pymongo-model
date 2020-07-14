@@ -1,5 +1,8 @@
 import setuptools
 
+with open('README.md') as file: 
+    long_description = file.read() 
+
 REQUIREMENTS = ['jsondiff','pymongo'] 
 
 setuptools.setup(
@@ -8,6 +11,7 @@ setuptools.setup(
     author="Pankaj Singh",
     author_email="aa3pankaj@gmail.com",
     description="Simple pymongo document model",
+    long_description=long_description,
     url="https://github.com/aa3pankaj/pymongo-model",
     packages=setuptools.find_packages(),
     classifiers=[
