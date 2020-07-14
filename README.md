@@ -27,7 +27,6 @@ from pymongo_model import SimpleModel, DiffHistoryModelV1, DiffHistoryModelV2
 MONGO_KEY = os.getenv('MONGO_KEY')
 client = pymongo.MongoClient(MONGO_KEY)
 db = client["your_database"]
-
 ```
 
 #### Using SimpleModel

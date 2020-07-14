@@ -7,11 +7,12 @@ REQUIREMENTS = ['jsondiff','pymongo']
 
 setuptools.setup(
     name="pymongo-model",
-    version="1.0.1",
+    version="1.0.2",
     author="Pankaj Singh",
     author_email="aa3pankaj@gmail.com",
     description="Simple pymongo document model",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url="https://github.com/aa3pankaj/pymongo-model",
     packages=setuptools.find_packages(),
     classifiers=[
