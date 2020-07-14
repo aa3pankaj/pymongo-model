@@ -1,7 +1,6 @@
 from jsondiff import diff
 from bson.objectid import ObjectId
 from bson.json_util import dumps
-import json
 
 class SimpleModel(dict):
     """
@@ -31,7 +30,7 @@ class SimpleModel(dict):
 class DiffHistoryModelV2(SimpleModel):
     """
     A simple model that wraps mongodb document, 
-    Also creates a delta collection for document revision tracking
+    Also creates a delta_collection for document revision tracking
     """
     __getattr__ = dict.get
     __delattr__ = dict.__delitem__
@@ -39,25 +38,24 @@ class DiffHistoryModelV2(SimpleModel):
 
     def undo(self):
         pass
-    def __diff_update(self):
-        match_copy = self.collection.find_one({"_id": ObjectId(self._id)})
-        diff_object = diff(dumps(match_copy),dumps(self),load=True, dump=True)
+    def __get_diff(self):
+        doc_copy = self.collection.find_one({"_id": ObjectId(self._id)})
+        diff_object = diff(dumps(doc_copy),dumps(self),load=True, dump=True)
         return diff_object
         
     def save(self):
         if not self._id:
             self.collection.insert_one(self)
         else:
-            diff = self.__diff_update()
+            diff = self.__get_diff()
             self.collection.update(
                 { "_id": ObjectId(self._id) }, self)
             
-            _delta_collection_name = "_delta"+"_"+self.name
-            _delta_collection = self.db_object[_delta_collection_name]
-            _delta_collection.insert_one({ "collection_name": self.name,
+            delta_collection = self.db_object[self.delta_collection_name]
+            delta_collection.insert_one({ "collection_name": self.name,
                                                 "document_id" : self._id,
                                                 "diff": diff,
-                                                "_version": _delta_collection.count()+1,
+                                                "_version": delta_collection.count()+1,
                                                 "reason":"update"
             }
             )
@@ -65,7 +63,7 @@ class DiffHistoryModelV2(SimpleModel):
 class DiffHistoryModelV1(SimpleModel):
     """
     A simple model that wraps mongodb document, 
-    Also creates a _delta_collection for document revision tracking,
+    Also creates a delta_collection for document revision tracking,
     In this version of DiffHistoryModel, it creates below document for each update i.e after invoking save()
     {
        "collection_name": name of the collection of the document for which revision is being done,
@@ -80,12 +78,11 @@ class DiffHistoryModelV1(SimpleModel):
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
 
-
     def undo(self):
         self.delete_latest_revision()
-        match_latest = self.get_latest_revision()
+        doc_latest = self.get_latest_revision()
         self.clear()
-        self._id = match_latest["_id"]
+        self._id = doc_latest["_id"]
         self.__reload_latest_from_delta()
         super().save()
         
@@ -93,37 +90,36 @@ class DiffHistoryModelV1(SimpleModel):
         if not self._id:
             self.collection.insert_one(self)
         else:
-            _delta_collection = self.db_object[self._delta_collection_name]
+            delta_collection = self.db_object[self.delta_collection_name]
             self.collection.update(
                 { "_id": ObjectId(self._id) }, self)
-            result = _delta_collection.find({"document_id":self._id})
+            result = delta_collection.find({"document_id":self._id})
             result_count = result.count()
-            _delta_collection.insert_one({"collection_name": self.name,
+            current_version = result_count + 1
+            delta_collection.insert_one({"collection_name": self.delta_collection_name,
                                            "document_id" : self._id,
                                            "document":self,
-                                           "_version": result_count+1,
-                                           "reason":"update",
+                                           "_version": current_version,
                                            "is_latest":True
                                             })
-            result_count = _delta_collection.find({"document_id":self._id}).count()
-            if result_count > 1:
-                _delta_collection.update_one({"document_id":self._id,"_version":result_count-1},{"$set":{"is_latest":False}})
+            if current_version > 1:
+                delta_collection.update_one({"document_id":self._id,"_version":current_version-1},{"$set":{"is_latest":False}})
 
     def __reload_latest_from_delta(self):
-        _delta_collection = self.db_object[self._delta_collection_name]
-        doc = _delta_collection.find_one({"_id": ObjectId(self._id)})['document']
+        delta_collection = self.db_object[self.delta_collection_name]
+        doc = delta_collection.find_one({"_id": ObjectId(self._id)})['document']
         self._id = doc["_id"]
         self.update(doc)
 
     def get_latest_revision(self):
-        _delta_collection = self.db_object[self._delta_collection_name]
-        return _delta_collection.find_one({"document_id":self._id,"is_latest":True})
+        delta_collection = self.db_object[self.delta_collection_name]
+        return delta_collection.find_one({"document_id":self._id,"is_latest":True})
 
     def delete_latest_revision(self):
-        _delta_collection = self.db_object[self._delta_collection_name]
-        _delta_collection.remove({"document_id":self._id,"is_latest":True})
-        result = _delta_collection.find({"document_id":self._id})
+        delta_collection = self.db_object[self.delta_collection_name]
+        delta_collection.remove({"document_id":self._id,"is_latest":True})
+        result = delta_collection.find({"document_id":self._id})
         result_count = result.count()
-        _delta_collection.update_one({"document_id":self._id,"_version":result_count},{"$set":{"is_latest":True}})
+        delta_collection.update_one({"document_id":self._id,"_version":result_count},{"$set":{"is_latest":True}})
         
 
