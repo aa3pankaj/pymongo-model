@@ -10,7 +10,7 @@ setuptools.setup(
     version="1.0.2",
     author="Pankaj Singh",
     author_email="aa3pankaj@gmail.com",
-    description="Simple pymongo collection model",
+    description="Simple model based usage of pymongo",
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="https://github.com/aa3pankaj/pymongo-model",
