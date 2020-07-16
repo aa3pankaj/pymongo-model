@@ -69,7 +69,6 @@ class DiffHistoryModelV1(SimpleModel):
        "document_id" : mongo id of document for which revision is being done,
        "document": entire document object for which revision is being done,
        "_version": revision number of document,
-       "reason": "update",
        "is_latest":Boolean, true only for latest
     }
     """
