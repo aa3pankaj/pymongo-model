@@ -36,7 +36,7 @@ db = client["your_database"]
 ```python
 """ A simple model that wraps mongodb document 
 """
-class YourSimpleModel(SimpleModel):
+class Player(SimpleModel):
     collection = db.your_collection   #mongo collection object
 
 
@@ -86,8 +86,8 @@ match.save()  #commited in original collection, Also a new document is created i
 
 #helper methods
 doc_latest = match.get_latest_revision()  #latest record in db
-match.delete_latest_revision()  #deletes latest record in delta_collection, and makes previos record as latest but original document will not be touched
-match.undo()   #deletes latest record in delta_collection, and makes previos record as latest, Also original document will be updated
+match.delete_latest_revision()  #deletes latest record in delta_collection, and makes previous record as latest but original document will not be touched
+match.undo()   #deletes latest record in delta_collection, and makes previous record as latest, Also original document will be updated
 ```
 
 #### Using DiffHistoryModelV2
