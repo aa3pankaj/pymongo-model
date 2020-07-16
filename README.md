@@ -25,14 +25,14 @@ Usage
 ```python
 import pymongo
 from bson.objectid import ObjectId
-from pymongo_model import SimpleModel, DiffHistoryModelV1, DiffHistoryModelV2
+from model.pymongo_model import SimpleModel, DiffHistoryModelV1, DiffHistoryModelV2
 
 MONGO_KEY = os.getenv('MONGO_KEY')
 client = pymongo.MongoClient(MONGO_KEY)
 db = client["your_database"]
 ```
 
-##### Using SimpleModel
+#### Using SimpleModel
 ```python
 """ A simple model that wraps mongodb document 
 """
@@ -54,7 +54,7 @@ player.save()  #now everything will be committed at once in db
 
 ```
 
-##### Using DiffHistoryModelV1
+#### Using DiffHistoryModelV1
 ```python
 
 """ A simple model that wraps mongodb document, 
@@ -90,7 +90,7 @@ match.delete_latest_revision()  #deletes latest record in delta_collection, and 
 match.undo()   #deletes latest record in delta_collection, and makes previos record as latest, Also original document will be updated
 ```
 
-##### Using DiffHistoryModelV2
+#### Using DiffHistoryModelV2
 ```python
 
 """ A simple model that wraps mongodb document, 
@@ -124,7 +124,7 @@ match.save()  #commited in original collection, Also a new document is created i
 
 Projects using pymongo-model
 ----------------------------
-1. [PexaBot]("https://github.com/aa3pankaj/PexaBot") : A chatbot for cricket match scoring and stats analysis
+1. [PexaBot](https://github.com/aa3pankaj/PexaBot) : A chatbot for cricket match scoring and stats analysis
     
 Support
 -------

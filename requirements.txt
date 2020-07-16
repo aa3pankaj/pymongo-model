@@ -1,2 +1,0 @@
-pymongo>=3.10.1         
-jsondiff>=1.2.0
