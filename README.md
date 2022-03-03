@@ -1,6 +1,6 @@
 Pymongo Model
 ==================================================== 
-[![PyPI version](https://badge.fury.io/py/apache-airflow.svg)](https://badge.fury.io/py/pymongo-model)
+[![PyPI version](https://badge.fury.io/py/apache-airflow.svg)](https://pypi.org/project/pymongo-model/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pymongo-model.svg)](https://pypi.org/project/pymongo-model/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/aa3pankaj/pymongo-model/blob/master/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/pymongo-model?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPi%20-%20Downloads)](https://pepy.tech/project/pymongo-model)
