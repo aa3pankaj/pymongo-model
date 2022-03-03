@@ -1,14 +1,19 @@
 Pymongo Model
 ==================================================== 
+[![PyPI version](https://badge.fury.io/py/apache-airflow.svg)](https://badge.fury.io/py/pymongo-model)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pymongo-model.svg)](https://pypi.org/project/pymongo-model/)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/aa3pankaj/pymongo-model/blob/master/LICENSE)
+[![Downloads](https://static.pepy.tech/personalized-badge/pymongo-model?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPi%20-%20Downloads)](https://pepy.tech/project/pymongo-model)
+[![Downloads](https://static.pepy.tech/personalized-badge/pymongo-model?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPi%20-%20Downloads/month)](https://pepy.tech/project/pymongo-model)
 
-With pymongo-model, it will be easier for you to use pymongo, as you will get a local copy of mongoDB document, you can do any change in the local copy (python object), changes will be committed from local copy to mongoDB only when you invoke save method like it happens in any ORM library.\
+With pymongo-model, it will be easier for you to use pymongo as you will get a local copy of mongoDB document, you can do any change in the local copy (python object), changes will be committed from local copy to mongoDB only when you invoke save method like it happens in any ORM library.\
 \
-SimpleModel object provides basic feature of updating mongo document locally and commiting at once.\
+``SimpleModel`` object provides basic feature of updating mongo document locally and commiting at once.\
 \
 Also, 
 You can use below models for document history tracking feature (that can be used for operations like undo)
-1. In DiffHistoryModelV1, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.
-2. In DiffHistoryModelV2, we are using [json-diff](https://github.com/fzumstein/jsondiff) for calculating difference in the versions and storing just the difference object instead of entire document for versioning.
+1. In ``DiffHistoryModelV1``, we are storing a new document (in delta collection) which consists of version details as well as original document everytime it is updated.
+2. In ``DiffHistoryModelV2``, we are using [json-diff](https://github.com/fzumstein/jsondiff) for calculating difference in the versions and storing just the difference object instead of entire document for versioning.
 
 Installation
 ------------
